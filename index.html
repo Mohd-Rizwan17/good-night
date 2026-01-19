@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Good Night Pookie 😁</title>
+    <title>Good Night 😁</title>
     <style>
       * {
         margin: 0;
@@ -142,18 +142,51 @@
         z-index: 100;
         text-shadow: 0 0 10px #00f2ff;
       }
+
+      /* ================= MOBILE FIX ================= */
+      @media (max-width: 768px) {
+        .text {
+          font-size: 2.5rem;
+          text-align: center;
+          padding: 0 12px;
+        }
+
+        #gnText2 {
+          font-size: 1.2rem;
+        }
+
+        .moon {
+          width: 70px;
+          height: 70px;
+          right: 8%;
+        }
+
+        #musicBtn,
+        #mainBtn,
+        #cuteBtn {
+          padding: 12px 26px;
+          font-size: 1rem;
+          margin-top: 10px;
+        }
+
+        #hint {
+          font-size: 1rem;
+          top: 35px;
+          padding: 0 10px;
+        }
+      }
     </style>
   </head>
   <body>
-    <div id="hint">Hit The Heart To Bloom ✨</div>
+    <div id="hint">Hit The Flower To Bloom ✨</div>
 
     <div class="sky" id="skyLayer">
       <div class="moon" id="moon"></div>
-      <h1 class="text" id="gnText">Good Night Pookie</h1>
+      <h1 class="text" id="gnText">Good Night</h1>
       <p class="text" id="gnText2">Have a Sweets Dream 😴💭</p>
       <button id="musicBtn">🎵 Play Song</button>
       <button id="mainBtn">Switch to Night</button>
-      <button id="cuteBtn">Click here Pookie 🥰</button>
+      <button id="cuteBtn">Click here 🥰</button>
     </div>
 
     <audio id="bgMusic" loop playsinline>
@@ -173,6 +206,121 @@
       const gnText2 = document.getElementById("gnText2");
       const bgMusic = document.getElementById("bgMusic");
       const hintText = document.getElementById("hint");
+
+      //***//
+
+      function drawFlowerIcon(size) {
+        let petals = 8;
+
+        ctx.shadowBlur = 25;
+        // ctx.shadowColor = "#ff7ad9";
+        // ctx.fillStyle = "#ff7ad9";
+        ctx.fillStyle = "#7cffc4"; // mint
+        ctx.shadowColor = "#7cffc4";
+
+        for (let i = 0; i < petals; i++) {
+          ctx.save();
+          ctx.rotate(((Math.PI * 2) / petals) * i);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-size / 3, -size / 2, -size / 4, -size, 0, -size);
+          ctx.bezierCurveTo(size / 4, -size, size / 3, -size / 2, 0, 0);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // center
+        ctx.beginPath();
+        ctx.arc(0, 0, size / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff3a0";
+        ctx.fill();
+      }
+
+      let currentFlowerColor = "#7cffc4";
+      let flowerIndex = 0;
+
+      function flowerA(size) {
+        let petals = 8;
+        ctx.fillStyle = currentFlowerColor;
+        ctx.shadowColor = currentFlowerColor;
+        ctx.shadowBlur = 25;
+
+        for (let i = 0; i < petals; i++) {
+          ctx.save();
+          ctx.rotate(((Math.PI * 2) / petals) * i);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-size / 3, -size / 2, -size / 4, -size, 0, -size);
+          ctx.bezierCurveTo(size / 4, -size, size / 3, -size / 2, 0, 0);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, size / 4, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff3a0";
+        ctx.fill();
+      }
+
+      function flowerB(size) {
+        let petals = 6;
+        ctx.fillStyle = currentFlowerColor;
+        ctx.shadowColor = currentFlowerColor;
+        ctx.shadowBlur = 25;
+
+        for (let i = 0; i < petals; i++) {
+          ctx.save();
+          ctx.rotate(((Math.PI * 2) / petals) * i);
+          ctx.beginPath();
+          ctx.ellipse(0, -size / 1.4, size / 3, size / 1.6, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, size / 3, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+      }
+
+      function flowerC(size) {
+        let petals = 10;
+        ctx.fillStyle = currentFlowerColor;
+        ctx.shadowColor = currentFlowerColor;
+        ctx.shadowBlur = 25;
+
+        for (let i = 0; i < petals; i++) {
+          ctx.save();
+          ctx.rotate(((Math.PI * 2) / petals) * i);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(size / 4, -size / 1.5, 0, -size);
+          ctx.quadraticCurveTo(-size / 4, -size / 1.5, 0, 0);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, size / 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff7c2";
+        ctx.fill();
+      }
+
+      let flowerStyles = [flowerA, flowerB, flowerC];
+      let currentFlower = flowerA;
+
+      function pickRandomFlower() {
+        let next;
+        do {
+          next = Math.floor(Math.random() * flowerStyles.length);
+        } while (next === flowerIndex);
+
+        flowerIndex = next;
+        currentFlower = flowerStyles[flowerIndex];
+        currentFlowerColor = `hsl(${Math.random() * 360},100%,70%)`;
+      }
+
+      //***//
 
       musicBtn.onclick = () => {
         bgMusic.play().catch(() => console.log("Silent mode issue"));
@@ -424,16 +572,23 @@
               for (let i = 0; i < 8; i++) butterflies.push(new Butterfly());
               for (let i = 0; i < 20; i++) fireflies.push(new Firefly());
             }
-          } else {
-            let s = heart.size + Math.sin(Date.now() / 200) * 3;
-            ctx.beginPath();
-            ctx.moveTo(0, s / 4);
-            ctx.bezierCurveTo(0, 0, -s, 0, -s, s / 2);
-            ctx.bezierCurveTo(-s, s, 0, s * 1.3, 0, s * 1.6);
-            ctx.bezierCurveTo(0, s * 1.3, s, s, s, s / 2);
-            ctx.bezierCurveTo(s, 0, 0, 0, 0, s / 4);
-            ctx.fill();
           }
+          // else {
+          //   let s = heart.size + Math.sin(Date.now() / 200) * 3;
+          //   ctx.beginPath();
+          //   ctx.moveTo(0, s / 4);
+          //   ctx.bezierCurveTo(0, 0, -s, 0, -s, s / 2);
+          //   ctx.bezierCurveTo(-s, s, 0, s * 1.3, 0, s * 1.6);
+          //   ctx.bezierCurveTo(0, s * 1.3, s, s, s, s / 2);
+          //   ctx.bezierCurveTo(s, 0, 0, 0, 0, s / 4);
+          //   ctx.fill();
+          // }
+          else {
+            let s = heart.size + Math.sin(Date.now() / 200) * 3;
+            // drawFlowerIcon(s);
+            currentFlower(s);
+          }
+
           ctx.restore();
 
           if (heart.isFalling && bowOpacity > 0) bowOpacity -= 0.05;
@@ -471,6 +626,10 @@
               !heart.isFalling &&
               Math.hypot(ar.x - heart.x, ar.y - heart.y) < 40
             ) {
+              // heart.isFalling = true;
+              // heart.vy = -4;
+              // hintText.style.display = "none";
+              pickRandomFlower();
               heart.isFalling = true;
               heart.vy = -4;
               hintText.style.display = "none";
@@ -507,6 +666,7 @@
           dy = startY - curY;
         arrows.push({ x: bowX, y: bowY, vx: dx / 8, vy: dy / 8 });
       };
+      pickRandomFlower();
     </script>
   </body>
 </html>
